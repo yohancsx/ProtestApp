@@ -1,23 +1,34 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ProtestApp());
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class ProtestApp extends StatelessWidget {
+  //app root
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Tparty',
+      title: 'ProtestApp',
       theme: ThemeData(
-        // This is the theme of your application.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Container(
-        color: Colors.blue,
+        color: Colors.white,
         alignment: Alignment.center,
       ),
     );
+  }
+}
+
+///App wrapper
+///basically wraps the wntire app in some providers and streambuilders
+///for convenience
+///responsible for initializing the app session and other objects
+class ProtestAppWrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement App Wrapper
+    return Container();
   }
 }

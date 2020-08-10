@@ -1,6 +1,6 @@
-//create an anonymous user
-//this user persists over the duration of the application
-//ends after the application is exited
+///create an anonymous user
+///this user persists over the duration of the application
+///destroyed when the application is exited
 class AnonymousUser {
   AnonymousUser(this.userName);
 
