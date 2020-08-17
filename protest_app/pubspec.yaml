@@ -1,8 +1,6 @@
 name: protest_app
 description: A new Flutter project.
 
-# The following line prevents the package from being accidentally published to
-# pub.dev using `pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
@@ -24,10 +22,30 @@ dependencies:
   flutter:
     sdk: flutter
 
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  #cupertino icons
   cupertino_icons: ^0.1.3
+
+  #add dependency for checking internet connection
+  connectivity: ^0.4.8+6
+
+  #use provider for state management
+  provider: ^4.1.3
+
+  #english words
+  english_words: ^3.1.5
+
+  #firebase dependencies
+  firebase_storage: ^3.1.6
+  firebase_core: ^0.4.5
+  firebase_analytics: ^5.0.2
+  cloud_firestore: ^0.13.7
+  firebase_auth: ^0.14.0+5
+
+  #additional functional dependencies
+  location: ^3.0.2
+
+
+
 
 dev_dependencies:
   flutter_test:
