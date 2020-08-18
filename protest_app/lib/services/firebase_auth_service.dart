@@ -38,8 +38,4 @@ class FirebaseAuthService {
     }
     return false;
   }
-
-  ///Delete the user session data, to be done when the session ends
-  ///Returns true upon deletion, false if failure
-  Future<bool> deleteUserData(FirebaseUser user) async {}
 }

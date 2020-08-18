@@ -8,6 +8,7 @@ import 'package:protest_app/services/firebase_auth_service.dart';
 import 'package:protest_app/services/maps_service.dart';
 import 'package:protest_app/services/qr_scanner_service.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 void main() {
   runApp(ProtestApp());
@@ -42,7 +43,22 @@ class ProtestApp extends StatelessWidget {
           theme: ThemeData(
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
+          //Responsive builder
+          builder: (context, widget) => ResponsiveWrapper.builder(
+            widget,
+            maxWidth: 1200,
+            minWidth: 480,
+            defaultScale: true,
+            breakpoints: [
+              ResponsiveBreakpoint.resize(480, name: MOBILE),
+              ResponsiveBreakpoint.autoScale(800, name: TABLET),
+              ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+              ResponsiveBreakpoint.autoScale(2460, name: '4K'),
+            ],
+            background: Container(color: Colors.white),
+          ),
           home: Container(
+            //TODO: Implement home screen
             color: Colors.red,
             alignment: Alignment.center,
           ),
@@ -90,6 +106,13 @@ class ProtestAppWrapper extends StatelessWidget {
     FirebaseUser user = await auth.createFirebaseUser();
 
     if (user == null) {
+      return AppSession(isValid: false);
+    }
+
+    bool locationServiceEnabled = await maps.requestLocationEnabled();
+    bool locationPermissionGranted = await maps.requestLocationPermission();
+
+    if (!locationPermissionGranted || !locationServiceEnabled) {
       return AppSession(isValid: false);
     }
   }
