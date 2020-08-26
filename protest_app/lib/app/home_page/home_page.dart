@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:protest_app/app/home_page/home_page_model.dart';
+import 'package:protest_app/common/app_session.dart';
+import 'package:protest_app/services/qr_scanner_service.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
+  HomePage({@required this.session, @required this.model});
+
+  ///The application session
+  final AppSession session;
+
+  ///The page model
+  final HomePageModel model;
+
   @override
   Widget build(BuildContext context) {
     //size of screen
     Size size = MediaQuery.of(context).size;
+
+    //QR code service
+    final QrScannerService qrService =
+        Provider.of<QrScannerService>(context, listen: false);
 
     return Scaffold(
         appBar: AppBar(title: Text("ProtestApp")),
@@ -19,9 +35,12 @@ class HomePage extends StatelessWidget {
               //padding for the top
               SizedBox(height: size.height * 0.3),
 
-              //TODO: create QR code widget
               //center QR code widget
-              Container(alignment: Alignment.center, color: Colors.black),
+              Container(
+                alignment: Alignment.center,
+                child:
+                    qrService.getQRCode(session.user.firebaseUser.uid, 120.0),
+              ),
 
               //padding between QR code and photo
               SizedBox(height: size.height * 0.05),
@@ -31,6 +50,7 @@ class HomePage extends StatelessWidget {
                 alignment: Alignment.center,
                 child: IconButton(
                     icon: Icon(Icons.video_call),
+                    iconSize: 70.0,
                     onPressed: () {
                       print("take photo");
                     },
@@ -45,6 +65,7 @@ class HomePage extends StatelessWidget {
                 alignment: Alignment.center,
                 child: IconButton(
                     icon: Icon(Icons.message),
+                    iconSize: 70.0,
                     onPressed: () {
                       print("message");
                     },
@@ -62,7 +83,7 @@ class HomePage extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            child: Text('Drawer Header'),
+            child: Text('ProtestApp'),
             decoration: BoxDecoration(
               color: Colors.blue,
             ),
