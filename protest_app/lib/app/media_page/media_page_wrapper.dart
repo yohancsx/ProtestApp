@@ -17,7 +17,7 @@ class MediaPageWrapper extends StatelessWidget {
     final AppSession session = Provider.of<AppSession>(context, listen: false);
 
     return ChangeNotifierProvider<MediaPageModel>(
-      create: (context) => MediaPageModel(context: context),
+      create: (context) => MediaPageModel(context: context, session: session),
       child: StreamBuilder<ConnectivityResult>(
         stream: connect.onConnectivityChanged,
         builder:
@@ -27,7 +27,7 @@ class MediaPageWrapper extends StatelessWidget {
             return ConnectionErrorPage();
           }
           return Consumer<MediaPageModel>(builder: (context, model, child) {
-            return MediaPage(model: model, session: session);
+            return MediaPage(model: model);
           });
         },
       ),

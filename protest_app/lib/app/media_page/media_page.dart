@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:protest_app/app/media_page/media_page_model.dart';
-import 'package:protest_app/common/app_session.dart';
 
 ///A class to shiw and display media of the user
 class MediaPage extends StatelessWidget {
-  MediaPage({@required this.model, @required this.session});
+  MediaPage({@required this.model});
 
   ///The page model
   final MediaPageModel model;
-
-  ///The application session
-  final AppSession session;
 
   @override
   Widget build(BuildContext context) {

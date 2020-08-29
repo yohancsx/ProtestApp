@@ -21,7 +21,8 @@ class MapPageWrapper extends StatelessWidget {
     final MapsService maps = Provider.of<MapsService>(context, listen: false);
 
     return ChangeNotifierProvider<MapPageModel>(
-      create: (context) => MapPageModel(context: context, maps: maps),
+      create: (context) =>
+          MapPageModel(context: context, session: session, maps: maps),
       child: StreamBuilder<ConnectivityResult>(
         stream: connect.onConnectivityChanged,
         builder:
@@ -32,7 +33,7 @@ class MapPageWrapper extends StatelessWidget {
           }
           return Consumer<MapPageModel>(
             builder: (context, model, child) {
-              return MapPage(model: model, session: session);
+              return MapPage(model: model);
             },
           );
         },

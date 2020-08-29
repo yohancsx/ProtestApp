@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:protest_app/app/settings_page/settings_page_model.dart';
-import 'package:protest_app/common/app_session.dart';
 
 ///The settings page for the application
 class SettingsPage extends StatelessWidget {
-  SettingsPage({@required this.model, @required this.session});
-
-  ///The application session
-  final AppSession session;
+  SettingsPage({@required this.model});
 
   ///The page model
   final SettingsPageModel model;

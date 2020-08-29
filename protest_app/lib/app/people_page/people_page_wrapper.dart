@@ -17,7 +17,7 @@ class PeoplePageWrapper extends StatelessWidget {
     final AppSession session = Provider.of<AppSession>(context, listen: false);
 
     return ChangeNotifierProvider<PeoplePageModel>(
-      create: (context) => PeoplePageModel(context: context),
+      create: (context) => PeoplePageModel(context: context, session: session),
       child: StreamBuilder<ConnectivityResult>(
         stream: connect.onConnectivityChanged,
         builder:
@@ -28,7 +28,7 @@ class PeoplePageWrapper extends StatelessWidget {
           }
           return Consumer<PeoplePageModel>(
             builder: (context, model, child) {
-              return PeoplePage(model: model, session: session);
+              return PeoplePage(model: model);
             },
           );
         },

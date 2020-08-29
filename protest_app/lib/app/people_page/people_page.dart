@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:protest_app/app/people_page/people_page_model.dart';
-import 'package:protest_app/common/app_session.dart';
 
 ///The page for showing added people
 class PeoplePage extends StatelessWidget {
-  PeoplePage({this.model, this.session});
-
-  ///The application session
-  final AppSession session;
+  PeoplePage({this.model});
 
   ///The page model
   final PeoplePageModel model;

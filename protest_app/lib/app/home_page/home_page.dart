@@ -5,16 +5,12 @@ import 'package:protest_app/app/map_page/map_page_wrapper.dart';
 import 'package:protest_app/app/media_page/media_page_wrapper.dart';
 import 'package:protest_app/app/people_page/people_page_wrapper.dart';
 import 'package:protest_app/app/settings_page/settings_page_wrapper.dart';
-import 'package:protest_app/common/app_session.dart';
 import 'package:protest_app/services/qr_scanner_service.dart';
 import 'package:provider/provider.dart';
 
 ///The home page for the application
 class HomePage extends StatelessWidget {
-  HomePage({@required this.session, @required this.model});
-
-  ///The application session
-  final AppSession session;
+  HomePage({@required this.model});
 
   ///The page model
   final HomePageModel model;
@@ -82,7 +78,7 @@ class HomePage extends StatelessWidget {
             Container(
               alignment: Alignment.center,
               child: Text(
-                session.user.userName,
+                model.session.user.userName,
                 style: Theme.of(context).textTheme.headline3.copyWith(
                       color: Colors.blue,
                       fontWeight: FontWeight.bold,
@@ -95,7 +91,7 @@ class HomePage extends StatelessWidget {
             Container(
               alignment: Alignment.center,
               child: qrService.getQRCode(
-                "1" + session.user.firebaseUser.uid,
+                "1" + model.session.user.firebaseUser.uid,
                 size.width * 0.75,
               ),
             ),

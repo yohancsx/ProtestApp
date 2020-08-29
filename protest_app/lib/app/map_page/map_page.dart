@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:protest_app/app/map_page/map_page_model.dart';
-import 'package:protest_app/common/app_session.dart';
 
 ///The page to display the map which the user can interact with
 class MapPage extends StatelessWidget {
-  MapPage({this.model, this.session});
-
-  ///The application session
-  final AppSession session;
+  MapPage({this.model});
 
   ///The page model
   final MapPageModel model;

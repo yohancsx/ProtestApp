@@ -16,7 +16,8 @@ class SettingsPageWrapper extends StatelessWidget {
     final AppSession session = Provider.of<AppSession>(context, listen: false);
 
     return ChangeNotifierProvider<SettingsPageModel>(
-      create: (context) => SettingsPageModel(context: context),
+      create: (context) =>
+          SettingsPageModel(context: context, session: session),
       child: StreamBuilder<ConnectivityResult>(
         stream: connect.onConnectivityChanged,
         builder:
@@ -26,7 +27,7 @@ class SettingsPageWrapper extends StatelessWidget {
             return ConnectionErrorPage();
           }
           return Consumer<SettingsPageModel>(builder: (context, model, child) {
-            return SettingsPage(model: model, session: session);
+            return SettingsPage(model: model);
           });
         },
       ),
