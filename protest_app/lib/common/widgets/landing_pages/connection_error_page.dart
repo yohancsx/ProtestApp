@@ -10,10 +10,13 @@ class ConnectionErrorPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.signal_wifi_off, size: 100.0, color: Colors.grey[200]),
+          Icon(Icons.signal_wifi_off, size: 100.0, color: Colors.red),
           Text(
             "Please connect to a network to continue!",
-            style: Theme.of(context).textTheme.bodyText1,
+            style: Theme.of(context)
+                .textTheme
+                .bodyText1
+                .copyWith(color: Colors.red, fontSize: 20),
           ),
         ],
       ),

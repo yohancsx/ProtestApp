@@ -17,6 +17,17 @@ class FirebaseAuthService {
     }
   }
 
+  ///Signs out the current user, generally not to be used
+  Future<bool> signOutUser() async {
+    try {
+      await auth.signOut();
+      return true;
+    } catch (error) {
+      print(error.toString());
+      return false;
+    }
+  }
+
   ///Delete the anonymous user, to be done when app session ends
   ///WARNING: this does not delete user firestore data, for that use deleteUserData
   ///Returns true upon succesful deletion, and false if failure

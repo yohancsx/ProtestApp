@@ -47,6 +47,9 @@ dependencies:
   cloud_firestore: ^0.13.7
   firebase_auth: ^0.14.0+5
 
+  #google maps dependencies
+  google_maps_flutter: ^0.5.30
+  
   #additional functional dependencies
   location: ^3.0.2
   qr_flutter: ^3.2.0

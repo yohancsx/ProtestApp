@@ -1,9 +1,15 @@
+import 'dart:async';
+
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
 ///Maps service rsponsible for handling and displaying map and location data
 class MapsService {
   ///Instance of location service
   Location location = new Location();
+
+  ///Instance of the google maps object
+  Completer<GoogleMapController> mapController = Completer();
 
   ///Is the location service enabled
   bool serviceEnabled;

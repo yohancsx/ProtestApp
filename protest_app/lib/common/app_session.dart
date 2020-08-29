@@ -19,5 +19,16 @@ class AppSession {
   ///The firebase user for this session
   AnonymousUser user;
 
-  ///list of buddies for the firebase user
+  ///The error log for the application, logs the integer of the error (error code) and the
+  ///string decsribing the error itself
+  Map<int, String> errorLog;
+
+  ///Copies the initial app session data from a previously initialized sessoion
+  void copyInitialData(AppSession initializedSession) {
+    isValid = initializedSession.isValid;
+    deviceID = initializedSession.deviceID;
+    userPrefs = initializedSession.userPrefs;
+    user = initializedSession.user;
+    errorLog = initializedSession.errorLog;
+  }
 }

@@ -5,7 +5,7 @@ import 'package:protest_app/app/home_page/home_page_wrapper.dart';
 import 'package:protest_app/common/anon_user.dart';
 import 'package:protest_app/common/app_session.dart';
 import 'package:protest_app/common/strings.dart';
-import 'package:protest_app/common/widgets/landing_pages/connection_error_page.dart';
+import 'package:protest_app/common/widgets/landing_pages/splash_page.dart';
 import 'package:protest_app/services/connection_service.dart';
 import 'package:protest_app/services/firebase_auth_service.dart';
 import 'package:protest_app/services/maps_service.dart';
@@ -51,21 +51,21 @@ class ProtestApp extends StatelessWidget {
         Provider<CameraService>(
           create: (_) => CameraService(),
         ),
+        //Data Handler
         Provider<UserDataHandlerService>(
           create: (_) => UserDataHandlerService(),
+        ),
+        //App session
+        Provider<AppSession>(
+          create: (_) => AppSession(isValid: false),
         )
       ],
       child: MaterialApp(
         title: 'ProtestApp',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           visualDensity: VisualDensity.adaptivePlatformDensity,
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.red,
-            primaryColorDark: const Color(0XFF990000),
-            accentColor: Colors.blue,
-            backgroundColor: Colors.white,
-            errorColor: Colors.yellow,
-          ),
+          primarySwatch: Colors.red,
         ),
         //Responsive builder
         builder: (context, widget) => ResponsiveWrapper.builder(
@@ -184,20 +184,13 @@ class _ProtestAppWrapperState extends State<ProtestAppWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    //Connection service
-    final ConnectionService connect =
-        Provider.of<ConnectionService>(context, listen: false);
-
-    //Check for connection to network, if not return the error page
-    //If connected create an app session and then go to main page
-
     return FutureBuilder<AppSession>(
       future: initApp,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Container(
             alignment: Alignment.center,
-            child: CircularProgressIndicator(),
+            child: SplashPage(),
           );
         } else if (snapshot.hasError) {
           return Container(
@@ -208,23 +201,23 @@ class _ProtestAppWrapperState extends State<ProtestAppWrapper> {
             ),
           );
         } else {
-          //Only provider of the app session, all other widgets will be able to access this session
-          return Provider<AppSession>(
-            create: (context) => snapshot.data,
-            child: Consumer<AppSession>(
-              builder: (context, session, child) {
-                if (session.isValid) {
-                  return HomePageWrapper(session: session);
-                }
-                return Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    Strings.sessionFailureString,
-                    style: Theme.of(context).textTheme.bodyText2,
-                  ),
-                );
-              },
-            ),
+          //set the value
+          AppSession session = Provider.of<AppSession>(context, listen: false);
+          session.copyInitialData(snapshot.data);
+
+          return Consumer<AppSession>(
+            builder: (context, session, child) {
+              if (session.isValid) {
+                return HomePageWrapper(session: session);
+              }
+              return Container(
+                alignment: Alignment.center,
+                child: Text(
+                  Strings.sessionFailureString,
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
+              );
+            },
           );
         }
       },
