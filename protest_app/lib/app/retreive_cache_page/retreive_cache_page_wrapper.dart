@@ -1,6 +1,6 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:protest_app/app/retreive_cache_page.dart/retreive_session_page.dart';
+import 'package:protest_app/app/retreive_cache_page/retreive_cache_page.dart';
 import 'package:protest_app/app/retreive_cache_page/retreive_cache_page_model.dart';
 import 'package:protest_app/common/app_session.dart';
 import 'package:protest_app/common/widgets/landing_pages/connection_error_page.dart';
