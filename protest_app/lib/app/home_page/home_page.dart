@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:protest_app/app/camera_page/camera_page_wrapper.dart';
 import 'package:protest_app/app/home_page/bottom_nav_bar.dart';
 import 'package:protest_app/app/home_page/home_page_model.dart';
 import 'package:protest_app/app/map_page/map_page_wrapper.dart';
 import 'package:protest_app/app/media_page/media_page_wrapper.dart';
 import 'package:protest_app/app/people_page/people_page_wrapper.dart';
+import 'package:protest_app/app/retreive_cache_page/retreive_cache_page_wrapper.dart';
 import 'package:protest_app/app/settings_page/settings_page_wrapper.dart';
 import 'package:protest_app/services/qr_scanner_service.dart';
 import 'package:provider/provider.dart';
@@ -133,7 +135,10 @@ class HomePage extends StatelessWidget {
                 alignment: Alignment.center,
                 child: FlatButton.icon(
                   color: Colors.blue,
-                  onPressed: () => print("Camera"),
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CameraPageWrapper())),
                   icon: Icon(
                     Icons.camera,
                     size: 100.0,
@@ -209,15 +214,17 @@ class HomePage extends StatelessWidget {
               color: Colors.blue,
             ),
             title: Text(
-              'Retreive Session',
+              'Retreive Cache',
               style: Theme.of(context).textTheme.bodyText1.copyWith(
                     color: Colors.blue,
                     fontSize: 20.0,
                   ),
             ),
             onTap: () {
-              //closes drawer
-              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => RetreivePageWrapper()));
             },
           ),
           SizedBox(height: size.height * 0.03),

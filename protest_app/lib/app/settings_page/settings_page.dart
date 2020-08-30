@@ -65,6 +65,27 @@ class SettingsPage extends StatelessWidget {
             ),
             SizedBox(height: size.height * 0.06),
 
+            //camera settings
+            Container(
+              alignment: Alignment.center,
+              child: ExpansionTile(
+                maintainState: true,
+                leading: Icon(
+                  Icons.camera_alt,
+                  size: 30.0,
+                  color: Colors.black,
+                ),
+                title: Text(
+                  "Camera Settings",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText2
+                      .copyWith(fontSize: 30.0),
+                ),
+              ),
+            ),
+            SizedBox(height: size.height * 0.04),
+
             //Media Sharing settings
             Container(
               alignment: Alignment.center,
@@ -110,6 +131,7 @@ class SettingsPage extends StatelessWidget {
             ),
             SizedBox(height: size.height * 0.04),
 
+            //location settings
             Container(
               alignment: Alignment.center,
               child: ExpansionTile(
@@ -130,6 +152,7 @@ class SettingsPage extends StatelessWidget {
             ),
             SizedBox(height: size.height * 0.04),
 
+            //messages and friend settings
             Container(
               alignment: Alignment.center,
               child: ExpansionTile(
@@ -147,7 +170,7 @@ class SettingsPage extends StatelessWidget {
                       .copyWith(fontSize: 30.0),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
