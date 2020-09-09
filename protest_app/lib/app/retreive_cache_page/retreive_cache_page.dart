@@ -40,7 +40,7 @@ class RetreivePage extends StatelessWidget {
             Container(
               alignment: Alignment.center,
               child: Text(
-                "Retreive Session",
+                "Retreive Cache",
                 style: Theme.of(context).textTheme.headline3.copyWith(
                       color: Colors.blue,
                       fontWeight: FontWeight.bold,
@@ -71,9 +71,9 @@ class RetreivePage extends StatelessWidget {
                       ),
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
-                      border: InputBorder.none, hintText: 'Enter session ID'),
+                      border: InputBorder.none, hintText: 'Enter Cache ID'),
                   onChanged: (text) {
-                    print("session ID: $text");
+                    print("Cache ID: $text");
                   },
                 ),
               ),
@@ -103,9 +103,9 @@ class RetreivePage extends StatelessWidget {
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'Enter session Password'),
+                      hintText: 'Enter Cache Password'),
                   onChanged: (text) {
-                    print("session Pass: $text");
+                    print("Cache Pass: $text");
                   },
                 ),
               ),

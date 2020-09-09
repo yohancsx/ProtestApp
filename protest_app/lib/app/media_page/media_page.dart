@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:protest_app/app/media_page/media_page_model.dart';
 
-///A class to shiw and display media of the user
+///A class to show and display media of the user
 class MediaPage extends StatelessWidget {
   MediaPage({@required this.model});
 

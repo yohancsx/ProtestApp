@@ -6,6 +6,8 @@ import 'package:protest_app/common/anon_user.dart';
 import 'package:protest_app/common/app_session.dart';
 import 'package:protest_app/common/strings.dart';
 import 'package:protest_app/common/widgets/landing_pages/splash_page.dart';
+import 'package:protest_app/services/cloud_database_service.dart';
+import 'package:protest_app/services/cloud_firestore_service.dart';
 import 'package:protest_app/services/connection_service.dart';
 import 'package:protest_app/services/firebase_auth_service.dart';
 import 'package:protest_app/services/maps_service.dart';
@@ -38,6 +40,14 @@ class ProtestApp extends StatelessWidget {
         //Firebase auth service
         Provider<FirebaseAuthService>(
           create: (_) => FirebaseAuthService(),
+        ),
+        //Cloud Firestore service
+        Provider<CloudFirestoreService>(
+          create: (_) => CloudFirestoreService(),
+        ),
+        //Cloud database service
+        Provider<CloudDatabaseService>(
+          create: (_) => CloudDatabaseService(),
         ),
         //Connection service
         Provider<ConnectionService>(
@@ -121,6 +131,10 @@ class _ProtestAppWrapperState extends State<ProtestAppWrapper> {
     final FirebaseAuthService auth =
         Provider.of<FirebaseAuthService>(context, listen: false);
 
+    //Firebase cloud service
+    final CloudFirestoreService cloud =
+        Provider.of<CloudFirestoreService>(context, listen: false);
+
     //Maps service
     final MapsService maps = Provider.of<MapsService>(context, listen: false);
 
@@ -144,11 +158,33 @@ class _ProtestAppWrapperState extends State<ProtestAppWrapper> {
     }
 
     print("creating anonymous user");
-    FirebaseUser firebaseUser = await auth.createFirebaseUser();
-    AnonymousUser user = AnonymousUser(firebaseUser: firebaseUser);
+    AuthResult firebaseResult = await auth.createFirebaseUser();
+    FirebaseUser firebaseUser = firebaseResult.user;
 
     //get user, if no user show error and fail
     if (firebaseUser == null) {
+      return AppSession(isValid: false);
+    }
+
+    //check if user is new, if not, delete this user and create a new one
+    if (!firebaseResult.additionalUserInfo.isNewUser) {
+      //delete all user data and delete user
+      cloud.deleteAllUserData(firebaseUser);
+      await firebaseUser.delete();
+
+      //create a new user
+      firebaseResult = await auth.createFirebaseUser();
+      firebaseUser = firebaseResult.user;
+    }
+
+    //create the anonymous user based on the firebase user
+    AnonymousUser user = AnonymousUser(firebaseUser: firebaseUser);
+
+    print("creating anonymous user data");
+    //create the firebase user data based on the anonymous user
+    bool userDataCreated = await cloud.createAnonymousUserData(user);
+
+    if (userDataCreated == false) {
       return AppSession(isValid: false);
     }
 
@@ -160,6 +196,8 @@ class _ProtestAppWrapperState extends State<ProtestAppWrapper> {
     if (!locationPermissionGranted || !locationServiceEnabled) {
       return AppSession(isValid: false);
     }
+    //get the current location of the user
+    maps.updateCurrentLocation();
 
     print("getting user preferences");
     UserPrefs userPrefs = await dataHandler.readUserPrefs();
@@ -173,7 +211,7 @@ class _ProtestAppWrapperState extends State<ProtestAppWrapper> {
     //get the device ID
     String deviceID = await idService.getDeviceId();
 
-    //create app session with all provided services
+    //create app session with all provided data objects
     return AppSession(
       isValid: true,
       deviceID: deviceID,

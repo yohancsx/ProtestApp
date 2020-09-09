@@ -6,11 +6,10 @@ class FirebaseAuthService {
 
   ///Create a Firebase user, which will persist while the app is active
   ///Returns null and prints error if failure
-  Future<FirebaseUser> createFirebaseUser() async {
+  Future<AuthResult> createFirebaseUser() async {
     try {
       AuthResult result = await auth.signInAnonymously();
-      FirebaseUser user = result.user;
-      return user;
+      return result;
     } catch (error) {
       print(error.toString());
       return null;

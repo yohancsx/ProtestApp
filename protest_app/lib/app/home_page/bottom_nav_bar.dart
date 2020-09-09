@@ -30,13 +30,7 @@ class BottomNavBar extends StatelessWidget {
             size: 50.0,
             color: Colors.black,
           ),
-          title: Text(
-            'Map',
-            style: Theme.of(context).textTheme.bodyText1.copyWith(
-                  color: Colors.black,
-                  fontSize: 20.0,
-                ),
-          ),
+          label: 'Map',
         ),
         BottomNavigationBarItem(
           icon: Icon(
@@ -44,13 +38,7 @@ class BottomNavBar extends StatelessWidget {
             size: 50.0,
             color: Colors.red,
           ),
-          title: Text(
-            'Delete',
-            style: Theme.of(context).textTheme.bodyText1.copyWith(
-                  color: Colors.red,
-                  fontSize: 20.0,
-                ),
-          ),
+          label: 'Delete',
         ),
         BottomNavigationBarItem(
           icon: Icon(
@@ -58,13 +46,7 @@ class BottomNavBar extends StatelessWidget {
             size: 50.0,
             color: Colors.blue,
           ),
-          title: Text(
-            'People',
-            style: Theme.of(context).textTheme.bodyText1.copyWith(
-                  color: Colors.blue,
-                  fontSize: 20.0,
-                ),
-          ),
+          label: 'People',
         ),
       ],
     );

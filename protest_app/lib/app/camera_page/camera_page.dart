@@ -67,7 +67,7 @@ class CameraPage extends StatelessWidget {
                         color: Colors.red,
                         size: 100.0,
                       ),
-                      onPressed: () => print("taking picture"),
+                      onPressed: () => model.takeAndStoreImage(),
                     ),
                   ),
 

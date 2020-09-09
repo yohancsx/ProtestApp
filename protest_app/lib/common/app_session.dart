@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:protest_app/common/anon_user.dart';
+import 'package:protest_app/common/media_file.dart';
 import 'package:protest_app/common/user_prefs.dart';
 
 ///A data class to hold all the data for a single application session
@@ -18,6 +19,9 @@ class AppSession {
 
   ///The firebase user for this session
   AnonymousUser user;
+
+  ///The list of media files
+  List<MediaFile> mediaFiles = [];
 
   ///The error log for the application, logs the integer of the error (error code) and the
   ///string decsribing the error itself

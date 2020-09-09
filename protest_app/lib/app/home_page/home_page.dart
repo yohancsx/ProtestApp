@@ -93,7 +93,7 @@ class HomePage extends StatelessWidget {
             Container(
               alignment: Alignment.center,
               child: qrService.getQRCode(
-                "1" + model.session.user.firebaseUser.uid,
+                model.session.user.firebaseUser.uid,
                 size.width * 0.75,
               ),
             ),

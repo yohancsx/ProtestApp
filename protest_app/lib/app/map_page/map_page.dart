@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:protest_app/app/map_page/map_page_model.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 ///The page to display the map which the user can interact with
 class MapPage extends StatelessWidget {
@@ -29,7 +30,7 @@ class MapPage extends StatelessWidget {
             Container(
               padding: EdgeInsets.only(right: 25.0),
               child: IconButton(
-                onPressed: () => print("refresh"),
+                onPressed: () => model.refreshMap(),
                 icon: Icon(
                   Icons.refresh,
                   size: 55.0,
@@ -47,7 +48,16 @@ class MapPage extends StatelessWidget {
         child: FittedBox(
           child: FloatingActionButton(
             onPressed: () {
-              print("adding marker");
+              print("marker adding enabled");
+              model.markerAddingEnabled = true;
+              Fluttertoast.showToast(
+                  msg: "Tap on the map to create a cache",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.red,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
             },
             child: Icon(Icons.location_pin, size: 35.0),
             backgroundColor: Colors.red,
