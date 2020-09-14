@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:protest_app/app/cache_page/cache_page_wrapper.dart';
 import 'package:protest_app/common/app_session.dart';
 import 'package:protest_app/services/maps_service.dart';
 import 'package:uuid/uuid.dart';
@@ -66,6 +67,10 @@ class MapPageModel extends ChangeNotifier {
     );
   }
 
+  ///TODO: A function to fetch all the nearby cache positions from the database, then
+  ///create markers for the cache and add them to the map
+  ///
+
   ///Adds a marker to the map at the position
   void addMarker(LatLng position) {
     if (markerAddingEnabled) {
@@ -78,7 +83,8 @@ class MapPageModel extends ChangeNotifier {
             snippet: "Click to set the cache data",
           ),
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-          onTap: () => print("going to cache screen"),
+          onTap: () => Navigator.push(context,
+              MaterialPageRoute(builder: (context) => CachePageWrapper())),
         ),
       );
     }

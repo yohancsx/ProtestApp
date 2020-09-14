@@ -2,16 +2,18 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:protest_app/app/message_page/message_page.dart';
 import 'package:protest_app/app/message_page/message_page_model.dart';
+import 'package:protest_app/common/anon_friend.dart';
 import 'package:protest_app/common/app_session.dart';
 import 'package:protest_app/common/widgets/landing_pages/connection_error_page.dart';
+import 'package:protest_app/services/cloud_firestore_service.dart';
 import 'package:protest_app/services/connection_service.dart';
 import 'package:provider/provider.dart';
 
 class MessagePageWrapper extends StatelessWidget {
-  MessagePageWrapper({@required this.friendID});
+  MessagePageWrapper({@required this.friend});
 
-  //the friend which we are messagings ID
-  final String friendID;
+  //the friend which we are messaging's ID
+  final AnonymousFriend friend;
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +22,12 @@ class MessagePageWrapper extends StatelessWidget {
 
     final AppSession session = Provider.of<AppSession>(context, listen: false);
 
+    final CloudFirestoreService cloud =
+        Provider.of<CloudFirestoreService>(context, listen: false);
+
     return ChangeNotifierProvider<MessagePageModel>(
-      create: (context) => MessagePageModel(context: context, session: session),
+      create: (context) => MessagePageModel(
+          context: context, session: session, cloud: cloud, friend: friend),
       child: StreamBuilder<ConnectivityResult>(
         stream: connect.onConnectivityChanged,
         builder:

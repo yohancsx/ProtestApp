@@ -87,7 +87,7 @@ class HomePageModel extends ChangeNotifier {
     //Check if we already have the friend
     bool friendExists = await cloud.checkFriendExists(friend, session);
 
-    if (!friendExists) {
+    if (friendExists) {
       //fetch try and add the user to the added users list in the database and
       //create all the necsessary databse documents
       friendAdded = await cloud.addFriend(friend, session);
@@ -99,7 +99,7 @@ class HomePageModel extends ChangeNotifier {
     if (friendAdded) {
       session.user.userFriendList.add(friend);
       print("success! friend added");
-      _showSuccessDialouge();
+      _showSuccessDialouge(friend);
     } else {
       _showFailureDialouge();
     }
@@ -111,7 +111,8 @@ class HomePageModel extends ChangeNotifier {
     print("quitting");
     try {
       result = await auth.deleteFirebaseUser();
-      //delete the firebase storage data depending on the settings
+      //TODO: delete the firebase storage data depending on the setting
+      result = await cloud.deleteAllUserData(session.user.firebaseUser);
     } catch (error) {
       print(error.toString());
     }
@@ -126,7 +127,7 @@ class HomePageModel extends ChangeNotifier {
   }
 
   ///Shows the success dialouge for adding a friend
-  void _showSuccessDialouge() async {
+  void _showSuccessDialouge(AnonymousFriend friend) async {
     await showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -136,8 +137,8 @@ class HomePageModel extends ChangeNotifier {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text("You have added the user " + "USER ID HERE"),
-                Text("You can now message and share data with this user"),
+                Text("You have added the user " + friend.friendName + "."),
+                Text("You can now message and share data with this user."),
               ],
             ),
           ),

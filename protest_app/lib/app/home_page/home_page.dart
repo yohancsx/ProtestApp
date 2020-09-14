@@ -61,7 +61,7 @@ class HomePage extends StatelessWidget {
       bottomNavigationBar: BottomNavBar(
         button1: () => Navigator.push(
             context, MaterialPageRoute(builder: (context) => MapPageWrapper())),
-        button2: () => print("delete"),
+        button2: () => model.deleteUserAndClose(),
         button3: () => Navigator.push(context,
             MaterialPageRoute(builder: (context) => PeoplePageWrapper())),
       ),

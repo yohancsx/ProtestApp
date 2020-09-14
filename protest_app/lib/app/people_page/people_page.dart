@@ -99,7 +99,7 @@ class PeoplePage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => MessagePageWrapper(
-                        friendID: friend.friendId,
+                        friend: friend,
                       ),
                     ),
                   ),

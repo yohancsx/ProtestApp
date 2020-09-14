@@ -11,7 +11,7 @@ class AnonymousUser {
   AnonymousUser({@required this.firebaseUser});
 
   ///The associated firebase user
-  final FirebaseUser firebaseUser;
+  final User firebaseUser;
 
   ///The list of user friends
   List<AnonymousFriend> userFriendList = [];

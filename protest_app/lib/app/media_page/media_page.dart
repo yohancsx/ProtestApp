@@ -29,7 +29,7 @@ class MediaPage extends StatelessWidget {
             Container(
               padding: EdgeInsets.only(right: 25.0),
               child: IconButton(
-                onPressed: () => print("refresh"),
+                onPressed: () => model.refreshAndLookForMedia(),
                 icon: Icon(
                   Icons.refresh,
                   size: 55.0,
@@ -44,76 +44,43 @@ class MediaPage extends StatelessWidget {
         color: Colors.white,
         alignment: Alignment.center,
         constraints: BoxConstraints.loose(size),
-        child: ListView(
-          physics: NeverScrollableScrollPhysics(),
-          children: [
-            //padding from top
-            SizedBox(height: size.height * 0.03),
+        child: FutureBuilder(
+          future: model.refreshMediaList(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return CircularProgressIndicator();
+            } else {
+              return ListView(
+                physics: NeverScrollableScrollPhysics(),
+                children: [
+                  //padding from top
+                  SizedBox(height: size.height * 0.03),
 
-            Container(
-              alignment: Alignment.center,
-              child: Text(
-                "Media",
-                style: Theme.of(context).textTheme.headline3.copyWith(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
+                  Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Media",
+                      style: Theme.of(context).textTheme.headline3.copyWith(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
-              ),
-            ),
+                  ),
 
-            //grid view
-            Container(
-              alignment: Alignment.center,
-              child: SizedBox(
-                height: size.height * 0.82,
-                child: GridView.count(
-                  primary: false,
-                  padding: const EdgeInsets.all(20),
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  crossAxisCount: 2,
-                  children: <Widget>[
-                    Container(
-                      color: Colors.red,
+                  //list view
+                  Container(
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                      height: size.height * 0.82,
+                      child: ListView(
+                        children: model.mediaItems,
+                      ),
                     ),
-                    Container(
-                      color: Colors.blue,
-                    ),
-                    Container(
-                      color: Colors.blue,
-                    ),
-                    Container(
-                      color: Colors.red,
-                    ),
-                    Container(
-                      color: Colors.red,
-                    ),
-                    Container(
-                      color: Colors.blue,
-                    ),
-                    Container(
-                      color: Colors.blue,
-                    ),
-                    Container(
-                      color: Colors.red,
-                    ),
-                    Container(
-                      color: Colors.red,
-                    ),
-                    Container(
-                      color: Colors.blue,
-                    ),
-                    Container(
-                      color: Colors.blue,
-                    ),
-                    Container(
-                      color: Colors.red,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+                  ),
+                ],
+              );
+            }
+          },
         ),
       ),
     );

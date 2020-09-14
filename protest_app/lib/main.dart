@@ -158,8 +158,8 @@ class _ProtestAppWrapperState extends State<ProtestAppWrapper> {
     }
 
     print("creating anonymous user");
-    AuthResult firebaseResult = await auth.createFirebaseUser();
-    FirebaseUser firebaseUser = firebaseResult.user;
+    UserCredential firebaseResult = await auth.createFirebaseUser();
+    User firebaseUser = firebaseResult.user;
 
     //get user, if no user show error and fail
     if (firebaseUser == null) {

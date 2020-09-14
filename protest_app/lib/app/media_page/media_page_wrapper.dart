@@ -4,6 +4,7 @@ import 'package:protest_app/app/media_page/media_page.dart';
 import 'package:protest_app/app/media_page/media_page_model.dart';
 import 'package:protest_app/common/app_session.dart';
 import 'package:protest_app/common/widgets/landing_pages/connection_error_page.dart';
+import 'package:protest_app/services/cloud_firestore_service.dart';
 import 'package:protest_app/services/connection_service.dart';
 import 'package:provider/provider.dart';
 
@@ -15,9 +16,12 @@ class MediaPageWrapper extends StatelessWidget {
         Provider.of<ConnectionService>(context, listen: false);
 
     final AppSession session = Provider.of<AppSession>(context, listen: false);
+    final CloudFirestoreService cloud =
+        Provider.of<CloudFirestoreService>(context, listen: false);
 
     return ChangeNotifierProvider<MediaPageModel>(
-      create: (context) => MediaPageModel(context: context, session: session),
+      create: (context) =>
+          MediaPageModel(context: context, session: session, cloud: cloud),
       child: StreamBuilder<ConnectivityResult>(
         stream: connect.onConnectivityChanged,
         builder:

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dash_chat/dash_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:protest_app/app/message_page/message_page_model.dart';
@@ -18,7 +19,7 @@ class MessagePage extends StatelessWidget {
           title: Container(
             padding: EdgeInsets.only(top: 20.0),
             child: Text(
-              "largefarmer-42",
+              model.friend.friendName,
               style: Theme.of(context)
                   .textTheme
                   .bodyText1
@@ -49,8 +50,67 @@ class MessagePage extends StatelessWidget {
         ),
       ),
       body: Container(
-          alignment: Alignment.center,
-          child: DashChat(messages: null, user: null, onSend: null)),
+        color: Colors.red,
+        padding: EdgeInsets.only(bottom: 70),
+        child: Container(
+          color: Colors.white,
+          child: StreamBuilder<QuerySnapshot>(
+            stream: model.cloud.getMessageStream(model.friend),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return CircularProgressIndicator();
+              } else {
+                //update the messages
+                model.updateMessages(snapshot.data);
+                //then create the chat widget
+                return DashChat(
+                  inverted: false,
+                  onSend: (message) async => model.sendMessage(message),
+                  sendOnEnter: true,
+                  textInputAction: TextInputAction.send,
+                  user: model.user,
+                  inputDecoration: InputDecoration.collapsed(
+                      hintText: "Send a helpful message"),
+                  dateFormat: DateFormat('yyyy-MMM-dd'),
+                  timeFormat: DateFormat('HH:mm'),
+                  messages: model.messages,
+                  showUserAvatar: false,
+                  showAvatarForEveryMessage: false,
+                  scrollToBottom: true,
+                  onPressAvatar: (ChatUser user) {
+                    print("OnPressAvatar: ${user.name}");
+                  },
+                  onLongPressAvatar: (ChatUser user) {
+                    print("OnLongPressAvatar: ${user.name}");
+                  },
+                  inputMaxLines: 5,
+                  messageContainerPadding:
+                      EdgeInsets.only(left: 5.0, right: 5.0),
+                  alwaysShowSend: true,
+                  inputTextStyle: TextStyle(fontSize: 16.0),
+                  inputContainerStyle: BoxDecoration(
+                    border: Border.all(width: 0.0),
+                    color: Colors.white,
+                  ),
+                  onLoadEarlier: () {
+                    print("loading...");
+                  },
+                  shouldShowLoadEarlier: false,
+                  showTraillingBeforeSend: true,
+                  leading: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.photo),
+                      onPressed: () {
+                        print("getting image");
+                      },
+                    )
+                  ],
+                );
+              }
+            },
+          ),
+        ),
+      ),
     );
   }
 }

@@ -6,9 +6,9 @@ class FirebaseAuthService {
 
   ///Create a Firebase user, which will persist while the app is active
   ///Returns null and prints error if failure
-  Future<AuthResult> createFirebaseUser() async {
+  Future<UserCredential> createFirebaseUser() async {
     try {
-      AuthResult result = await auth.signInAnonymously();
+      UserCredential result = await auth.signInAnonymously();
       return result;
     } catch (error) {
       print(error.toString());
@@ -32,20 +32,12 @@ class FirebaseAuthService {
   ///Returns true upon succesful deletion, and false if failure
   Future<bool> deleteFirebaseUser() async {
     try {
-      FirebaseUser user = await auth.currentUser();
+      User user = auth.currentUser;
       await user.delete();
       return true;
-    } on AuthException catch (error) {
-      if (error.code == 'requires-recent-login') {
-        AuthResult result = await auth.signInAnonymously();
-        FirebaseUser user = result.user;
-        await user.delete();
-        return true;
-      }
     } catch (error) {
       print(error.toString());
       return false;
     }
-    return false;
   }
 }
