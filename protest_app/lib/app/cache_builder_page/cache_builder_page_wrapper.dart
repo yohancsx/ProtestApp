@@ -1,27 +1,32 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:protest_app/app/settings_page/settings_page.dart';
-import 'package:protest_app/app/settings_page/settings_page_model.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:protest_app/app/cache_builder_page/cache_builder_page.dart';
+import 'package:protest_app/app/cache_builder_page/cache_builder_page_model.dart';
 import 'package:protest_app/common/app_session.dart';
 import 'package:protest_app/common/widgets/landing_pages/connection_error_page.dart';
+import 'package:protest_app/services/cloud_firestore_service.dart';
 import 'package:protest_app/services/connection_service.dart';
-import 'package:protest_app/services/user_data_handler_service.dart';
 import 'package:provider/provider.dart';
 
-class SettingsPageWrapper extends StatelessWidget {
+///Wrapper for the cache builder page
+class CacheBuilderPageWrapper extends StatelessWidget {
+  CacheBuilderPageWrapper({@required this.position});
+
+  final LatLng position;
+
   @override
   Widget build(BuildContext context) {
     final ConnectionService connect =
         Provider.of<ConnectionService>(context, listen: false);
 
-    final UserDataHandlerService userDataHandler =
-        Provider.of<UserDataHandlerService>(context, listen: false);
-
     final AppSession session = Provider.of<AppSession>(context, listen: false);
+    final CloudFirestoreService cloud =
+        Provider.of<CloudFirestoreService>(context, listen: false);
 
-    return ChangeNotifierProvider<SettingsPageModel>(
-      create: (context) => SettingsPageModel(
-          context: context, session: session, userDataHandler: userDataHandler),
+    return ChangeNotifierProvider<CacheBuilderPageModel>(
+      create: (context) => CacheBuilderPageModel(
+          context: context, session: session, cloud: cloud, position: position),
       child: StreamBuilder<ConnectivityResult>(
         stream: connect.onConnectivityChanged,
         builder:
@@ -30,8 +35,9 @@ class SettingsPageWrapper extends StatelessWidget {
           if (snapshot.data == ConnectivityResult.none) {
             return ConnectionErrorPage();
           }
-          return Consumer<SettingsPageModel>(builder: (context, model, child) {
-            return SettingsPage(model: model);
+          return Consumer<CacheBuilderPageModel>(
+              builder: (context, model, child) {
+            return CacheBuilderPage(model: model);
           });
         },
       ),

@@ -5,10 +5,7 @@ import 'package:protest_app/services/cloud_firestore_service.dart';
 ///Model for the media page
 class MediaPageModel extends ChangeNotifier {
   MediaPageModel(
-      {@required this.context, @required this.session, @required this.cloud}) {
-    //create the initial media list
-    refreshMediaList();
-  }
+      {@required this.context, @required this.session, @required this.cloud});
 
   ///The current build context
   BuildContext context;
@@ -17,7 +14,7 @@ class MediaPageModel extends ChangeNotifier {
   AppSession session;
 
   ///The list of widgets of media items
-  List<Widget> mediaItems;
+  List<Widget> mediaItems = [];
 
   ///The cloud firestore service
   CloudFirestoreService cloud;
@@ -27,12 +24,26 @@ class MediaPageModel extends ChangeNotifier {
     //add missing media references to the session
     bool mediaRefreshed = await cloud.refreshMedia(session);
 
+    //if we failed at refreshing the media data
     if (!mediaRefreshed) {
       return false;
     }
 
     //create the image widget and use the url to show the image, recreate the list
     List<Widget> itemsList = [];
+
+    itemsList.add(SizedBox(height: 30.0));
+    itemsList.add(Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.all(10.0),
+        child: Text(
+          "Media",
+          style: Theme.of(context)
+              .textTheme
+              .bodyText2
+              .copyWith(color: Colors.blue, fontSize: 50),
+        )));
+    itemsList.add(SizedBox(height: 30.0));
 
     session.mediaFiles.forEach((mediaFile) {
       itemsList.add(
@@ -55,7 +66,7 @@ class MediaPageModel extends ChangeNotifier {
         alignment: Alignment.center,
         padding: EdgeInsets.all(10.0),
         child: Text(
-          "Add media to see it here",
+          "Add media to see it here!",
           style: Theme.of(context)
               .textTheme
               .bodyText1

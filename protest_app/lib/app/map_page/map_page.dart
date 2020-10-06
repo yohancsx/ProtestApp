@@ -64,9 +64,18 @@ class MapPage extends StatelessWidget {
           ),
         ),
       ),
-      body: Container(
-        alignment: Alignment.center,
-        child: model.map,
+      body: FutureBuilder(
+        future: model.initializeMap(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Container(
+              alignment: Alignment.center,
+              child: model.map,
+            );
+          } else {
+            return Container(color: Colors.white);
+          }
+        },
       ),
     );
   }

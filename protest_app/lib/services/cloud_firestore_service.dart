@@ -6,6 +6,7 @@ import 'package:protest_app/common/anon_friend.dart';
 import 'package:protest_app/common/anon_user.dart';
 import 'package:protest_app/common/app_session.dart';
 import 'package:protest_app/common/cache.dart';
+import 'package:protest_app/common/cache_position.dart';
 import 'package:protest_app/common/media_file.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,6 +28,11 @@ class CloudFirestoreService {
   ///The collection reference for caches
   final CollectionReference cacheCollection =
       FirebaseFirestore.instance.collection('cache_data');
+
+  ///The collection reference for cache ID's which are organized by
+  ///their location using geohashing
+  final CollectionReference cacheLocationCollection =
+      FirebaseFirestore.instance.collection('cache_location');
 
   ///Initialize the geo flutter plugin
   final geo = Geoflutterfire();
@@ -272,8 +278,7 @@ class CloudFirestoreService {
       },
     );
 
-    //delete all non-cached media
-    //TODO: DELETE ALL NON CACHED MEDIA
+    //delete all non-cached media??
 
     //delete the data under "user_data"
     try {
@@ -295,7 +300,8 @@ class CloudFirestoreService {
   }
 
   ///Send a message to a user friend
-  Future<bool> sendMessage(AnonymousFriend friend, ChatMessage message) async {
+  Future<bool> sendMessage(
+      AnonymousFriend friend, ChatMessage message, AppSession session) async {
     try {
       await userMessageCollection
           .doc(friend.messageDocumentID)
@@ -310,6 +316,37 @@ class CloudFirestoreService {
     } catch (error) {
       print(error.toString());
       return false;
+    }
+
+    //check if we have any media in the message
+    //if so add that to the user media
+    if (message.customProperties.containsKey("media_id")) {
+      //add to message data
+      await userMessageCollection
+          .doc(friend.messageDocumentID)
+          .collection('message_data')
+          .doc(message.id)
+          .set({
+        "media_id": message.customProperties["media_id"],
+        "download_url": message.image
+      });
+
+      //add to user media
+      try {
+        await userProfileCollection
+            .doc(friend.friendId)
+            .collection('user_media')
+            .doc(message.customProperties["media_id"])
+            .set({
+          "time_added": message.createdAt,
+          "created_by_user": false,
+          "media_id": message.customProperties["media_id"],
+          "download_url": message.image
+        });
+      } catch (error) {
+        print(error.toString());
+        return false;
+      }
     }
     return true;
   }
@@ -331,7 +368,7 @@ class CloudFirestoreService {
 
     //if no documents then don't add anything to the session
     if (mediaDocuments.docs.isEmpty) {
-      return false;
+      return true;
     }
 
     //For each, if any are not in the session's media data, then add them
@@ -387,6 +424,7 @@ class CloudFirestoreService {
     cache.cacheDescription = cacheDocument.data()["cache_description"];
     cache.originalDeviceID = cacheDocument.data()["cache_device_id"];
     cache.originalUserID = cacheDocument.data()["cache_user"];
+    cache.cachePassword = cacheDocument.data()["cache_password"];
 
     //get the media files from the cache
     QuerySnapshot cacheMediaDocuments;
@@ -410,7 +448,8 @@ class CloudFirestoreService {
     cacheMediaDocuments.docs.forEach((mediaDocument) {
       MediaFile cacheFile = MediaFile(isValid: true);
       cacheFile.fileDownloadURL = mediaDocument.data()["download_url"];
-      cacheFile.creationTime = mediaDocument.data()["time_added"];
+      cacheFile.creationTime =
+          DateTime.tryParse(mediaDocument.data()["time_added"]);
       cacheFile.mediaId = mediaDocument.data()["media_id"];
       cache.cacheFiles.add(cacheFile);
     });
@@ -449,6 +488,7 @@ class CloudFirestoreService {
         "cache_description": cache.cacheDescription,
         "cache_user": cache.originalUserID,
         "cache_device_id": cache.originalDeviceID,
+        "cache_password": cache.cachePassword
       });
     } catch (error) {
       print(error.toString());
@@ -472,6 +512,18 @@ class CloudFirestoreService {
       }
     });
 
+    //add the cache location to the locations reference for geo indexing
+    GeoFirePoint cacheLocation = geo.point(
+        latitude: cache.cacheLocation.latitude,
+        longitude: cache.cacheLocation.longitude);
+
+    cacheLocationCollection.add({
+      'cache_name': cache.cacheName,
+      'cache_id': cache.cacheID,
+      'cache_description': cache.cacheDescription,
+      'position': cacheLocation.data
+    });
+
     //add the cache data to the user document
     try {
       await userProfileCollection
@@ -493,6 +545,40 @@ class CloudFirestoreService {
     return true;
   }
 
-  ///Fetches a list of cache ids whiwh are near the given user location
-  Future<bool> fetchNearbyCacheIDs(List<String> cacheIDs) async {}
+  ///Fetches a map of cache ids and descriptions which are near the given location
+  Future<bool> fetchNearbyCacheIDs(List<CachePosition> cachePositions,
+      LatLng nearPoint, double radius) async {
+    //get the point nearest to the latitude and longitude
+    GeoFirePoint center =
+        geo.point(latitude: nearPoint.latitude, longitude: nearPoint.longitude);
+
+    //get the collection reference
+    GeoFireCollectionRef geoRef =
+        geo.collection(collectionRef: cacheLocationCollection);
+
+    Stream<List<DocumentSnapshot>> nearbyCaches = geoRef.within(
+        center: center, radius: radius, field: 'position', strictMode: true);
+
+    List<DocumentSnapshot> cachesData;
+    try {
+      //get the initial list that the function returns
+      cachesData = await nearbyCaches.first;
+    } catch (error) {
+      print(error.toString());
+      return false;
+    }
+
+    //add the cache id and description to the output list of cache positions
+    cachesData.forEach((cacheDataDocument) {
+      CachePosition cachePos = CachePosition();
+      GeoPoint point = cacheDataDocument.data()['position']['geopoint'];
+      cachePos.point = point;
+      cachePos.cacheDescription = cacheDataDocument.data()["cache_description"];
+      cachePos.cacheID = cacheDataDocument.data()["cache_id"];
+      cachePos.cacheName = cacheDataDocument.data()["cache_name"];
+      cachePositions.add(cachePos);
+    });
+
+    return true;
+  }
 }

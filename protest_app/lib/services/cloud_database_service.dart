@@ -46,4 +46,17 @@ class CloudDatabaseService {
 
     return true;
   }
+
+  //delete an image from the storage
+  Future<bool> deleteStoredImage(String imageID) async {
+    StorageReference storageReferenceImg =
+        storageReference.child("user_image_data/$imageID");
+    try {
+      storageReferenceImg.delete();
+    } catch (error) {
+      print(error.toString());
+      return false;
+    }
+    return true;
+  }
 }

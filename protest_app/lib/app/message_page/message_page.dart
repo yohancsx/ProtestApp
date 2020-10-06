@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dash_chat/dash_chat.dart';
 import 'package:flutter/material.dart';
+import 'package:protest_app/app/message_page/media_picker_page.dart';
 import 'package:protest_app/app/message_page/message_page_model.dart';
 
 class MessagePage extends StatelessWidget {
@@ -101,7 +102,12 @@ class MessagePage extends StatelessWidget {
                     IconButton(
                       icon: Icon(Icons.photo),
                       onPressed: () {
-                        print("getting image");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MediaPickerPage(
+                                    session: model.session,
+                                    onSubmitFiles: model.sendMediaMessages)));
                       },
                     )
                   ],

@@ -3,6 +3,7 @@ import 'package:dash_chat/dash_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:protest_app/common/anon_friend.dart';
 import 'package:protest_app/common/app_session.dart';
+import 'package:protest_app/common/media_file.dart';
 import 'package:protest_app/services/cloud_firestore_service.dart';
 import 'package:uuid/uuid.dart';
 
@@ -70,10 +71,29 @@ class MessagePageModel extends ChangeNotifier {
 
     //send message to database
     try {
-      await cloud.sendMessage(friend, message);
+      await cloud.sendMessage(friend, message, session);
     } catch (error) {
       print(error.toString());
     }
+
+    notifyListeners();
+  }
+
+  ///Send a message or messages with media
+  void sendMediaMessages(List<MediaFile> messageFiles) async {
+    messageFiles.forEach((mediaFile) async {
+      //send the message
+      ChatMessage message = ChatMessage(text: "new media", user: user);
+      message.id = uuid.v1();
+      message.createdAt = DateTime.now();
+      message.image = mediaFile.fileDownloadURL;
+      message.customProperties.addAll({"media_id": mediaFile.mediaId});
+      try {
+        await cloud.sendMessage(friend, message, session);
+      } catch (error) {
+        print(error.toString());
+      }
+    });
 
     notifyListeners();
   }
@@ -99,11 +119,16 @@ class MessagePageModel extends ChangeNotifier {
           String uidoFSender = document.data()["sent_by"];
           String messageText = document.data()["message_text"];
           String timeCreated = document.data()["time_sent"];
+          String imageURL;
+          if (document.data().containsKey("download_url")) {
+            imageURL = document.data()["download_url"];
+          }
           messages.add(ChatMessage(
               id: document.id,
               createdAt: DateTime.tryParse(timeCreated),
               text: messageText,
-              user: uidoFSender == user.uid ? user : userFriend));
+              user: uidoFSender == user.uid ? user : userFriend,
+              image: imageURL));
         }
       },
     );

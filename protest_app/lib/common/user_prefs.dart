@@ -18,6 +18,9 @@ class UserPrefs {
   ///Does the user want to share videos and images by default with contacts?
   bool shareMedia = false;
 
+  ///does the user want to be able to receive shared media from friends
+  bool receiveSharedMedia = true;
+
   ///Does the user enable location-dropping of media by default?
   bool enableLocationDropping = false;
 

@@ -23,6 +23,9 @@ class Cache {
   ///The description of the cache
   String cacheDescription;
 
+  ///The cache password (if it exists)
+  String cachePassword = "1i2g41hv1v8d7f13hbdb1gd91";
+
   ///Media files associated with the cache
   List<MediaFile> cacheFiles = [];
 }

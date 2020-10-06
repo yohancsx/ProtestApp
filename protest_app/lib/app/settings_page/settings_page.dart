@@ -125,6 +125,28 @@ class SettingsPage extends StatelessWidget {
                         ),
                       )
                     ],
+                  ),
+                  ExpansionTile(
+                    title: Text(
+                      "Auto Cache On Delete",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2
+                          .copyWith(fontSize: 20.0),
+                    ),
+                    trailing: Checkbox(value: false, onChanged: null),
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(left: 20.0, bottom: 5.0),
+                        child: Text(
+                          "When enabled, automatically creates a cache with all your media when you delete your profile. The password is your current username.",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText2
+                              .copyWith(fontSize: 15.0),
+                        ),
+                      )
+                    ],
                   )
                 ],
               ),
@@ -169,6 +191,30 @@ class SettingsPage extends StatelessWidget {
                       .bodyText2
                       .copyWith(fontSize: 30.0),
                 ),
+                children: [
+                  ExpansionTile(
+                    title: Text(
+                      "Allow Added User Media Messages",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2
+                          .copyWith(fontSize: 20.0),
+                    ),
+                    trailing: Checkbox(value: false, onChanged: null),
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(left: 20.0, bottom: 5.0),
+                        child: Text(
+                          "When enabled, other users can send you images and videos.",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText2
+                              .copyWith(fontSize: 15.0),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
               ),
             ),
           ],

@@ -1,5 +1,6 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:protest_app/app/home_page/home_page_wrapper.dart';
 import 'package:protest_app/common/anon_user.dart';
@@ -114,6 +115,7 @@ class _ProtestAppWrapperState extends State<ProtestAppWrapper> {
   @override
   void initState() {
     super.initState();
+    print("Starting app Initialization");
     initApp = initializeAppSession(context);
   }
 
@@ -127,6 +129,10 @@ class _ProtestAppWrapperState extends State<ProtestAppWrapper> {
   ///Only after all futures have completed properly will the future return a valid
   ///App session object.
   Future<AppSession> initializeAppSession(BuildContext context) async {
+    print("Initializing firebase");
+    //initialize all firebase stuff
+    await Firebase.initializeApp();
+
     //Firebase auth service
     final FirebaseAuthService auth =
         Provider.of<FirebaseAuthService>(context, listen: false);
@@ -226,6 +232,7 @@ class _ProtestAppWrapperState extends State<ProtestAppWrapper> {
       future: initApp,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
+          print("returning Splash Page");
           return Container(
             alignment: Alignment.center,
             child: SplashPage(),
@@ -239,6 +246,7 @@ class _ProtestAppWrapperState extends State<ProtestAppWrapper> {
             ),
           );
         } else {
+          print("entering app");
           //set the value
           AppSession session = Provider.of<AppSession>(context, listen: false);
           session.copyInitialData(snapshot.data);

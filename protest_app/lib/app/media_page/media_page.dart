@@ -50,34 +50,15 @@ class MediaPage extends StatelessWidget {
             if (!snapshot.hasData) {
               return CircularProgressIndicator();
             } else {
-              return ListView(
-                physics: NeverScrollableScrollPhysics(),
-                children: [
-                  //padding from top
-                  SizedBox(height: size.height * 0.03),
-
-                  Container(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Media",
-                      style: Theme.of(context).textTheme.headline3.copyWith(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
+              //list view
+              return Container(
+                alignment: Alignment.center,
+                child: SizedBox(
+                  height: size.height * 0.82,
+                  child: ListView(
+                    children: model.mediaItems,
                   ),
-
-                  //list view
-                  Container(
-                    alignment: Alignment.center,
-                    child: SizedBox(
-                      height: size.height * 0.82,
-                      child: ListView(
-                        children: model.mediaItems,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               );
             }
           },

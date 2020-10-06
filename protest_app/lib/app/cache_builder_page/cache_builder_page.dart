@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:protest_app/app/cache_page/cache_page_model.dart';
+import 'package:protest_app/app/cache_builder_page/cache_builder_page_model.dart';
 
-class CachePage extends StatelessWidget {
-  CachePage({@required this.model});
+class CacheBuilderPage extends StatelessWidget {
+  CacheBuilderPage({@required this.model});
 
   ///The cache page model
-  final CachePageModel model;
+  final CacheBuilderPageModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +31,18 @@ class CachePage extends StatelessWidget {
         alignment: Alignment.center,
         child: ListView(
           children: [
+            //title
+            SizedBox(height: 20.0),
+            Container(
+              alignment: Alignment.center,
+              child: Text(
+                "Set Cache Data",
+                style: Theme.of(context)
+                    .textTheme
+                    .headline3
+                    .copyWith(color: Colors.blue),
+              ),
+            ),
             //cache name
             SizedBox(height: 30.0),
             Container(
@@ -40,45 +52,70 @@ class CachePage extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .headline2
-                    .copyWith(color: Colors.blue),
-              ),
-            ),
-
-            //cache description
-            SizedBox(height: 30.0),
-            Container(
-              alignment: Alignment.center,
-              child: Text(
-                model.cache.cacheDescription,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText2
                     .copyWith(color: Colors.black),
               ),
             ),
 
-            //cache media
-            SizedBox(height: 60.0),
+            //set description
+            SizedBox(height: 30.0),
+            TextField(
+              cursorColor: Colors.blue,
+              cursorHeight: 40.0,
+              cursorWidth: 3.0,
+              style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    fontSize: 30.0,
+                    color: Colors.black,
+                  ),
+              textAlign: TextAlign.center,
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'Enter Cache Description'),
+              onChanged: (text) {
+                model.cache.cacheDescription = text;
+              },
+            ),
+
+            //set password
+            SizedBox(height: 30.0),
+            TextField(
+              cursorColor: Colors.blue,
+              cursorHeight: 40.0,
+              cursorWidth: 3.0,
+              style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    fontSize: 30.0,
+                    color: Colors.black,
+                  ),
+              textAlign: TextAlign.center,
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'Enter Cache Password (optional)'),
+              onChanged: (text) {
+                model.cache.cachePassword = text;
+              },
+            ),
+
+            //the media to be selected
+            SizedBox(height: 30.0),
             _buildMediaData(context),
 
-            //download media button
-            SizedBox(height: 60.0),
+            //submit button
+            SizedBox(height: 30.0),
             Container(
               alignment: Alignment.center,
               child: Container(
                 width: size.width * 0.8,
-                color: Colors.blue,
+                color: Colors.red,
                 alignment: Alignment.center,
                 child: FlatButton.icon(
-                  color: Colors.blue,
-                  onPressed: () => model.downloadCacheMedia(),
+                  color: Colors.red,
+                  onPressed: () async => model.checkAndUploadCache(),
                   icon: Icon(
-                    Icons.download_sharp,
+                    Icons.upload_file,
                     size: 100.0,
                     color: Colors.white,
                   ),
                   label: Text(
-                    "Get Media",
+                    "Upload Cache",
                     style: Theme.of(context)
                         .textTheme
                         .button
@@ -87,6 +124,7 @@ class CachePage extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(height: 50.0),
           ],
         ),
       ),

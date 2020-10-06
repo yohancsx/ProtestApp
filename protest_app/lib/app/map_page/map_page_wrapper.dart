@@ -2,6 +2,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:protest_app/common/app_session.dart';
 import 'package:protest_app/common/widgets/landing_pages/connection_error_page.dart';
+import 'package:protest_app/services/cloud_firestore_service.dart';
 import 'package:protest_app/services/connection_service.dart';
 import 'package:protest_app/services/maps_service.dart';
 import 'package:provider/provider.dart';
@@ -20,9 +21,15 @@ class MapPageWrapper extends StatelessWidget {
 
     final MapsService maps = Provider.of<MapsService>(context, listen: false);
 
+    final CloudFirestoreService cloud =
+        Provider.of<CloudFirestoreService>(context, listen: false);
+
+    //update the current location
+    maps.updateCurrentLocation();
+
     return ChangeNotifierProvider<MapPageModel>(
-      create: (context) =>
-          MapPageModel(context: context, session: session, maps: maps),
+      create: (context) => MapPageModel(
+          context: context, session: session, maps: maps, cloud: cloud),
       child: StreamBuilder<ConnectivityResult>(
         stream: connect.onConnectivityChanged,
         builder:

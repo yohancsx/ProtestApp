@@ -27,6 +27,7 @@ class UserDataHandlerService {
       }
     }
 
+    //Add more preferences here
     await prefs.setBool("isNew", userPrefs.isNew);
     await prefs.setBool("shareLocation", userPrefs.shareLocation);
     await prefs.setBool("shareMedia", userPrefs.shareMedia);
